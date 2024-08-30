@@ -25,7 +25,13 @@ public class ItemController {
         ApiResponse response = new ApiResponse(HttpStatus.OK.value(), itemDto);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
-
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ApiResponse> updateItem(@PathVariable Long id, @RequestBody ItemDto itemDto) {
+        itemDto.setId(id);
+        ItemDto updatedItem = itemService.saveItem(itemDto);
+        ApiResponse response = new ApiResponse(HttpStatus.OK.value(), updatedItem);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
     @GetMapping("/fetchById/{id}")
     public ResponseEntity<ApiResponse> getItemById(@PathVariable long id){
