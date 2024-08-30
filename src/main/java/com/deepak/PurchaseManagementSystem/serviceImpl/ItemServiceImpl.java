@@ -27,15 +27,26 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto saveItem(ItemDto itemDto) {
+        Item item;
+        if (itemDto.getId() != null){
+            item = itemRepository.findById(itemDto.getId()).get();
 
-        Item item = itemMapper.toItem(itemDto);
-//        item.setItemCode("item-"+UUID.randomUUID());
-        String itemCode = generateItemCode();
-        item.setItemCode(itemCode);
+            // Update items
+            item.setName(itemDto.getName());
+            item.setQuantity(itemDto.getQuantity());
+            item.setPackingType(itemDto.getPackingType());
+            item.setPackQuantity(itemDto.getPackQuantity());
+        }else {
+
+            //create Item
+            item = itemMapper.toItem(itemDto);
+            String itemCode = generateItemCode();
+            item.setItemCode(itemCode);
+
+        }
 
         Item itemSaved = itemRepository.save(item);
-         return  itemMapper.toItemDto(itemSaved);
-
+        return  itemMapper.toItemDto(itemSaved);
     }
 
     @Override
