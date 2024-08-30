@@ -7,7 +7,9 @@ import com.deepak.PurchaseManagementSystem.repository.ItemRepository;
 import com.deepak.PurchaseManagementSystem.service.ItemService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ItemServiceImpl implements ItemService {
@@ -41,6 +43,26 @@ public class ItemServiceImpl implements ItemService {
 
         Item item = itemRepository.findById(id).get();
         return itemMapper.toItemDto(item);
+    }
+
+    @Override
+    public List<ItemDto> getAllItems() {
+        List<Item> items  = itemRepository.findAll();
+            ItemDto itemDto = new ItemDto();
+
+
+
+        List<ItemDto> itemDtos = items.stream()
+                .map(itemMapper::toItemDto)
+                .collect(Collectors.toList());
+
+        return itemDtos;
+    }
+
+    @Override
+    public String deleteItem(Long id) {
+        itemRepository.deleteById(id);
+        return "delete successfully";
     }
 
     private String generateItemCode() {
