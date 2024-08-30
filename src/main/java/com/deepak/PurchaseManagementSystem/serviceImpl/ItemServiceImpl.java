@@ -36,6 +36,13 @@ public class ItemServiceImpl implements ItemService {
 
     }
 
+    @Override
+    public ItemDto getItemById(Long id) {
+
+        Item item = itemRepository.findById(id).get();
+        return itemMapper.toItemDto(item);
+    }
+
     private String generateItemCode() {
         Long maxId = itemRepository.findMaxId();
         if (maxId == null) {
