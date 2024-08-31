@@ -1,6 +1,9 @@
 package com.deepak.PurchaseManagementSystem.serviceImpl;
 
 import com.deepak.PurchaseManagementSystem.dto.ItemDto;
+import com.deepak.PurchaseManagementSystem.exception.ItemCreationException;
+import com.deepak.PurchaseManagementSystem.exception.ItemDeletionException;
+import com.deepak.PurchaseManagementSystem.exception.ItemNotFoundException;
 import com.deepak.PurchaseManagementSystem.mapper.ItemMapper;
 import com.deepak.PurchaseManagementSystem.model.Item;
 import com.deepak.PurchaseManagementSystem.repository.ItemRepository;
@@ -8,7 +11,6 @@ import com.deepak.PurchaseManagementSystem.service.ItemService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,53 +29,63 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto saveItem(ItemDto itemDto) {
-        Item item;
-        if (itemDto.getId() != null){
-            item = itemRepository.findById(itemDto.getId()).get();
+       try {
+           Item item;
+           if (itemDto.getId() != null) {
+               item = itemRepository.findById(itemDto.getId()).orElseThrow(() -> new ItemNotFoundException("this Item with Id"+ itemDto.getId()+" not present in db "));
 
-            // Update items
-            item.setName(itemDto.getName());
-            item.setQuantity(itemDto.getQuantity());
-            item.setPackingType(itemDto.getPackingType());
-            item.setPackQuantity(itemDto.getPackQuantity());
-        }else {
+               // Update items
+               item.setName(itemDto.getName());
+               item.setQuantity(itemDto.getQuantity());
+               item.setPackingType(itemDto.getPackingType());
+               item.setPackQuantity(itemDto.getPackQuantity());
+           } else {
 
-            //create Item
-            item = itemMapper.toItem(itemDto);
-            String itemCode = generateItemCode();
-            item.setItemCode(itemCode);
+               //create Item
+               item = itemMapper.toItem(itemDto);
+               String itemCode = generateItemCode();
+               item.setItemCode(itemCode);
 
-        }
+           }
 
-        Item itemSaved = itemRepository.save(item);
-        return  itemMapper.toItemDto(itemSaved);
+           Item itemSaved = itemRepository.save(item);
+           return itemMapper.toItemDto(itemSaved);
+       }catch (Exception e){
+            throw new ItemCreationException(e.getMessage());
+       }
     }
 
     @Override
     public ItemDto getItemById(Long id) {
 
-        Item item = itemRepository.findById(id).get();
+        Item item = itemRepository.findById(id)
+                .orElseThrow(() -> new ItemNotFoundException("Item with ID " + id + " not found"));
+
         return itemMapper.toItemDto(item);
     }
 
     @Override
     public List<ItemDto> getAllItems() {
         List<Item> items  = itemRepository.findAll();
-            ItemDto itemDto = new ItemDto();
-
-
-
+        ItemDto itemDto = new ItemDto();
         List<ItemDto> itemDtos = items.stream()
                 .map(itemMapper::toItemDto)
                 .collect(Collectors.toList());
-
         return itemDtos;
     }
 
     @Override
     public String deleteItem(Long id) {
-        itemRepository.deleteById(id);
-        return "delete successfully";
+        try{
+            if (!itemRepository.existsById(id)){
+                throw new ItemDeletionException(id);
+            }else {
+                itemRepository.deleteById(id);
+                return "delete successfully";
+            }
+        }catch (Exception e){
+            throw new ItemDeletionException(id);
+        }
     }
 
     private String generateItemCode() {

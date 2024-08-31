@@ -10,16 +10,18 @@ import org.springframework.http.HttpStatus;
 @Setter
 @NoArgsConstructor
 public class ApiResponse<T> {
-    private String message;
+    private String statusName;
     private int statusCode;
     private T payload;
 
-    public ApiResponse(int statusCode, T payload){
+    public ApiResponse(int statusCode,String statusName, T payload){
         this.statusCode = statusCode;
+        this.statusName = statusName;
         this.payload = payload;
     }
-    public ApiResponse(String message, int statusCode, T payload){
+    public ApiResponse(String message, int statusCode, String statusName){
         this.statusCode = statusCode;
-        this.payload = payload;
+        this.statusName = statusName;
     }
+
 }

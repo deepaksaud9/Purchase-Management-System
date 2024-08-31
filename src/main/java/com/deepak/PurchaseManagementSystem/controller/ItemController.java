@@ -22,35 +22,35 @@ public class ItemController {
     @PostMapping("/save")
     public ResponseEntity<ApiResponse> createItem(@RequestBody ItemDto itemDto){
         ItemDto savedItems = itemService.saveItem(itemDto);
-        ApiResponse response = new ApiResponse(HttpStatus.OK.value(), itemDto);
+        ApiResponse response = new ApiResponse(HttpStatus.OK.value(),HttpStatus.OK.name(), itemDto);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
     @PutMapping("/update/{id}")
     public ResponseEntity<ApiResponse> updateItem(@PathVariable Long id, @RequestBody ItemDto itemDto) {
         itemDto.setId(id);
         ItemDto updatedItem = itemService.saveItem(itemDto);
-        ApiResponse response = new ApiResponse(HttpStatus.OK.value(), updatedItem);
+        ApiResponse response = new ApiResponse(HttpStatus.OK.value(),HttpStatus.OK.name(), updatedItem);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/fetchById/{id}")
     public ResponseEntity<ApiResponse> getItemById(@PathVariable long id){
         ItemDto itemDto = itemService.getItemById(id);
-        ApiResponse response = new ApiResponse(HttpStatus.OK.value(),itemDto);
+        ApiResponse response = new ApiResponse(HttpStatus.OK.value(),HttpStatus.OK.name(), itemDto);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @GetMapping("/fetchAllItem")
     public ResponseEntity<ApiResponse> getAllItems(){
         List<ItemDto> itemDto = itemService.getAllItems();
-        ApiResponse response = new ApiResponse(HttpStatus.OK.value(), itemDto);
+        ApiResponse response = new ApiResponse(HttpStatus.OK.value(),HttpStatus.OK.name(), itemDto);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ApiResponse> deleteItemById(@PathVariable Long id){
         itemService.deleteItem(id);
-        ApiResponse response = new ApiResponse(HttpStatus.OK.value(), "Deleted successfully");
+        ApiResponse response = new ApiResponse(HttpStatus.OK.value(),HttpStatus.OK.name(), "Deleted successfully");
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
