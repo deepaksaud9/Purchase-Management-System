@@ -22,5 +22,5 @@ public class PacketNumber {
 
     @ManyToOne
     @JsonIgnore
-    private Purchase purchase;
+    public Item item;
 }

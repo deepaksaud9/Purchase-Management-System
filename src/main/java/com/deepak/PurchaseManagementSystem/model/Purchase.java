@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 @Entity
 @Getter
@@ -18,17 +19,11 @@ public class Purchase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private LocalDate purchaseDate;
+
+    private LocalDateTime createdDate;
     @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
     @JoinColumn(name = "purchase_id")
     private List<Item> items;
 
-    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
-    @JoinColumn(name = "purchase_id")
-    private List<PacketNumber> packetNumberList;
-
-
-    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
-    @JoinColumn(name = "purchase_id")
-    private List<PacketSerialNumber> packetSerialNumberList;
     private String status;
 }

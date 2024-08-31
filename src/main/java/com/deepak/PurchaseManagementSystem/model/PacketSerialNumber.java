@@ -1,5 +1,6 @@
 package com.deepak.PurchaseManagementSystem.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,7 +21,8 @@ public class PacketSerialNumber {
     private long id;
 
     private String serialNumber;
-    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
-    @JoinColumn(name = "purchase_id")
-    private List<Item> items;
+
+    @ManyToOne
+    @JsonIgnore
+    public Item item;
 }
