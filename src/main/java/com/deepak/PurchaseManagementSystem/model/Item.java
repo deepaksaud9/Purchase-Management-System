@@ -20,8 +20,8 @@ public class Item {
 
     @Column(unique = true)
     private String itemCode;
-    private int quantity;
+    private double quantity;
     private String packingType;
-    private int packQuantity;
+    private double packQuantity;
 
 }
