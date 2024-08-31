@@ -20,13 +20,11 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     @Override
     public void save(Purchase purchase) {
-
         itemValidation(purchase);
-
 
     }
 
-    private static void itemValidation(Purchase purchase) {
+    private  void itemValidation(Purchase purchase) {
         if (purchase.getItems().isEmpty()){
             throw new ItemCreationException("Item can not be empty.");
         }
