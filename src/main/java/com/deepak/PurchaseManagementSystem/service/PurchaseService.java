@@ -5,7 +5,7 @@ import com.deepak.PurchaseManagementSystem.model.Purchase;
 
 public interface PurchaseService {
 
-    public void save(Purchase purchase);
+    public void savePurchase(Purchase purchase);
 
 
 }

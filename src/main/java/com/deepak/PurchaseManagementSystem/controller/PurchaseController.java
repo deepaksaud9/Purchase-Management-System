@@ -22,7 +22,7 @@ public class PurchaseController {
 
     @PostMapping("/savePurchase")
     public ResponseEntity<ApiResponse<?>> save(@RequestBody Purchase purchase){
-        purchaseService.save(purchase);
+        purchaseService.savePurchase(purchase);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(HttpStatus.OK.value(),"Success",purchase));
     }
 
