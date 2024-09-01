@@ -22,7 +22,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     }
 
     @Override
-    public void save(Purchase purchase) {
+    public void savePurchase(Purchase purchase) {
         itemValidation(purchase);
         purchase.setPurchaseDate(purchase.getPurchaseDate());
         purchase.setCreatedDate(LocalDateTime.now());
