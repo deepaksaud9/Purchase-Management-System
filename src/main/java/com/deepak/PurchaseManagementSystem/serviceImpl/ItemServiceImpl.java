@@ -5,9 +5,12 @@ import com.deepak.PurchaseManagementSystem.exception.ItemCreationException;
 import com.deepak.PurchaseManagementSystem.exception.ItemDeletionException;
 import com.deepak.PurchaseManagementSystem.exception.ItemNotFoundException;
 import com.deepak.PurchaseManagementSystem.mapper.ItemMapper;
+import com.deepak.PurchaseManagementSystem.mapper.ItemMapperImpl;
 import com.deepak.PurchaseManagementSystem.model.Item;
 import com.deepak.PurchaseManagementSystem.repository.ItemRepository;
 import com.deepak.PurchaseManagementSystem.service.ItemService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,13 +19,13 @@ import java.util.stream.Collectors;
 @Service
 public class ItemServiceImpl implements ItemService {
 
-
+    private static final Logger logger = LoggerFactory.getLogger(ItemServiceImpl.class);
     private final ItemRepository itemRepository;
     private final ItemMapper itemMapper;
 
     private static final String PREFIX = "Item-";
     private static final int PADDING_LENGTH = 3;
-    public ItemServiceImpl(ItemRepository itemRepository, ItemMapper itemMapper) {
+    public ItemServiceImpl(ItemRepository itemRepository, ItemMapperImpl itemMapper) {
         this.itemRepository = itemRepository;
         this.itemMapper = itemMapper;
     }
@@ -30,26 +33,28 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDto saveItem(ItemDto itemDto) {
        try {
-           Item item;
+           Item item = new Item();
            if (itemDto.getId() != null) {
                item = itemRepository.findById(itemDto.getId()).orElseThrow(() -> new ItemNotFoundException("this Item with Id"+ itemDto.getId()+" not present in db "));
 
                // Update items
                item.setName(itemDto.getName());
                item.setQuantity(itemDto.getQuantity());
+               item.setItemCode(itemDto.getItemCode());
                item.setPackingType(itemDto.getPackingType());
                item.setPackQuantity(itemDto.getPackQuantity());
            } else {
-
                //create Item
                item = itemMapper.toItem(itemDto);
                String itemCode = generateItemCode();
                item.setItemCode(itemCode);
-
            }
+           Item item1 = itemRepository.save(item);
+           System.out.println(item1.getId()+item1.getItemCode());
+           logger.info("Saved Item: ID = {}, ItemCode = {}", item1.getId(), item1.getItemCode());
+           ItemDto itemDto1 = itemMapper.toItemDto(item1);
+           return itemDto1;
 
-           Item itemSaved = itemRepository.save(item);
-           return itemMapper.toItemDto(itemSaved);
        }catch (Exception e){
             throw new ItemCreationException(e.getMessage());
        }

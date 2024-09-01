@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
-    @Query("SELECT COALESCE(MAX(i.id), 0) FROM Item i")
+    @Query("SELECT MAX(i.id) FROM Item i")
     Long findMaxId();
 }

@@ -22,7 +22,7 @@ public class ItemController {
     @PostMapping("/save")
     public ResponseEntity<ApiResponse> createItem(@RequestBody ItemDto itemDto){
         ItemDto savedItems = itemService.saveItem(itemDto);
-        ApiResponse response = new ApiResponse(HttpStatus.OK.value(),HttpStatus.OK.name(), itemDto);
+        ApiResponse response = new ApiResponse(HttpStatus.OK.value(),HttpStatus.OK.name(), savedItems);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
     @PutMapping("/update/{id}")
