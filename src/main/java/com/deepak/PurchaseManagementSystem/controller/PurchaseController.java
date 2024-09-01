@@ -1,5 +1,4 @@
 package com.deepak.PurchaseManagementSystem.controller;
-
 import com.deepak.PurchaseManagementSystem.model.Purchase;
 import com.deepak.PurchaseManagementSystem.response.ApiResponse;
 import com.deepak.PurchaseManagementSystem.service.PurchaseService;
@@ -15,11 +14,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/purchase")
 public class PurchaseController {
     @Autowired
-    private PurchaseService purchaseService;
+    private final PurchaseService purchaseService;
 
-    @PostMapping("/save")
+    public PurchaseController(PurchaseService purchaseService) {
+        this.purchaseService = purchaseService;
+    }
+
+    @PostMapping("/savePurchase")
     public ResponseEntity<ApiResponse<?>> save(@RequestBody Purchase purchase){
         purchaseService.save(purchase);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(HttpStatus.OK.value(),"Success",purchase));
     }
+
 }

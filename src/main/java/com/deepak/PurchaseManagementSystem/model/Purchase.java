@@ -19,11 +19,9 @@ public class Purchase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private LocalDate purchaseDate;
-
     private LocalDateTime createdDate;
-    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "purchase_id")
     private List<Item> items;
-
     private String status;
 }

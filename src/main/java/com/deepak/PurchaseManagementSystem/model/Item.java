@@ -32,7 +32,6 @@ public class Item {
     @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
     @JoinColumn(name = "item_id")
     private List<PacketSerialNumber> packetSerialNumberList;
-
     @ManyToOne
     @JsonIgnore
     public Purchase purchase;

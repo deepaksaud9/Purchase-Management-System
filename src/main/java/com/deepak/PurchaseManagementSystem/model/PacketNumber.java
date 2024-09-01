@@ -17,9 +17,7 @@ public class PacketNumber {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     private String packetNumber;
-
     @ManyToOne
     @JsonIgnore
     public Item item;
